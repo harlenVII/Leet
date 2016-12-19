@@ -1,17 +1,15 @@
 public class Solution {
     public int majorityElement(int[] nums) {
-        int candidate = 0, count = 0;
+        // hash table is simple, we use moore voting algorithm
+        int res = 0, count = 0;
         for (int num : nums) {
-            if (count == 0) {
-                candidate = num;
+            if (count == 0)
+                res = num;
+            if (num == res)
                 count++;
-            }else {
-                if (num == candidate) 
-                    count++;
-                else
-                    count--;
-            }
+            else
+                count--;
         }
-        return candidate;
+        return res;
     }
 }
