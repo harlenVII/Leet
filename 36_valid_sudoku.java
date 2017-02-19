@@ -44,3 +44,19 @@ public class Solution {
             nums[i] = 0;
     }
 }
+public boolean isValidSudoku(char[][] board) {
+        // check input
+        boolean[][] check1 = new boolean[9][9], check2 = new boolean[9][9], check3 = new boolean[9][9];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] != '.') {
+                    int num = board[i][j] - '0' - 1;
+                    int k = i / 3 * 3 + j / 3;
+                    if (check1[i][num] || check2[j][num] || check3[k][num]) 
+                        return false;
+                    check1[i][num] = check2[j][num] = check3[k][num] = true;
+                }
+            }
+        }
+        return true;
+    }
