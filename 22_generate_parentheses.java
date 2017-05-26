@@ -13,7 +13,7 @@ public class Solution {
         }
         if (left != 0)
             helper(left - 1, right, res, cur + "(");
-        if (left < right || left == 0)
+        if (left < right)
             helper(left, right - 1, res, cur + ")");
     }
 }
