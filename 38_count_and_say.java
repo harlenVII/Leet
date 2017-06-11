@@ -1,22 +1,24 @@
 public class Solution {
     public String countAndSay(int n) {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-        while (list.size() < n) {
+        if (n <= 0)
+            return null;
+        String[] res = new String[n + 1];
+        res[1] = "1";
+        for (int i = 2; i <= n; i++) {
+            String s = res[i - 1];
             StringBuilder next = new StringBuilder();
-            String s = list.get(list.size() - 1);
-            for (int i = 0; i < s.length();) {
-                char c = s.charAt(i);
-                int len = 0;
-                while (i != s.length() && s.charAt(i) == c) {
-                    i++;
-                    len++;
+            int cur = 0;
+            while (cur < s.length()) {
+                char ch = s.charAt(cur);
+                int start = cur;
+                while(cur < s.length() && s.charAt(cur) == ch) {
+                    cur++;
                 }
-                next.append(len);
-                next.append(c);
+                next.append(cur - start);
+                next.append(ch);
             }
-            list.add(next.toString());
+            res[i] = next.toString();
         }
-        return list.get(n - 1);
+        return res[n];
     }
 }
