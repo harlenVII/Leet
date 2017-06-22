@@ -5,14 +5,10 @@ public class Solution {
         Set<Integer> set1 = new HashSet<>();
         for (int num : nums1)
             set1.add(num);
-        Set<Integer> res = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
         for (int num : nums2)
             if (set1.contains(num))
-                res.add(num);
-        int[] result = new int[res.size()];
-        int i = 0;
-        for (Integer num : res)
-            result[i++] = num;
-        return result;
+                set2.add(num);
+        return set2.stream().mapToInt(i->i).toArray();
     }
-}
+}`

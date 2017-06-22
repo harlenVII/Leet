@@ -9,21 +9,21 @@
  */
 public class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
-        ArrayList<Integer> tree = new ArrayList<>();
-        Stack<TreeNode> stack = new Stack<>();
+        List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
         TreeNode temp = root;
-        while (temp != null || !stack.empty()){
-            while (temp != null){
+        Stack<TreeNode> stack = new Stack<>();
+        while (temp != null || !stack.isEmpty()) {
+            if (temp != null) {
                 stack.push(temp);
                 temp = temp.left;
-            }
-            
-            if (!stack.empty()){
+            } else {
                 temp = stack.pop();
-                tree.add(temp.val);
+                res.add(temp.val);
                 temp = temp.right;
             }
         }
-        return tree;
+        return res;
     }
 }

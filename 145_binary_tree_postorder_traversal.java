@@ -8,36 +8,35 @@
  * }
  */
 public class Solution {
-    private class HelperNode{
-        TreeNode node;
-        boolean isVisited;
-        HelperNode(TreeNode node){
+    class Node{
+        Node(TreeNode node) {
             this.node = node;
-            isVisited = false;
+            visited = false;
         }
+        TreeNode node;
+        boolean visited;
     }
     public List<Integer> postorderTraversal(TreeNode root) {
-        Stack<HelperNode> stack = new Stack<>();
-        List<Integer> list = new ArrayList<Integer>();
-        TreeNode tmp = root;
-        while (tmp != null || !stack.empty()){
-            while (tmp != null){
-                HelperNode helperNode = new HelperNode(tmp);
-                stack.push(helperNode);
-                tmp = tmp.left;
-            }
-            if (!stack.empty()){
-                HelperNode top = stack.pop();
-                if (!top.isVisited){
-                    top.isVisited = true;
-                    stack.push(top);
-                    tmp = top.node.right;
-                }else{
-                    list.add(top.node.val);
-                    tmp = null;
+        List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
+        TreeNode temp = root;
+        Stack<Node> stack = new Stack<>();
+        while (temp != null || !stack.isEmpty()) {
+            if (temp != null) {
+                stack.push(new Node(temp));
+                temp = temp.left;
+            } else {
+                Node node = stack.pop();
+                if (!node.visited) {
+                    stack.push(node);
+                    temp = node.node.right;
+                    node.visited = true;
+                } else {
+                    res.add(node.node.val);    
                 }
             }
         }
-        return list;
+        return res;
     }
 }
