@@ -9,23 +9,22 @@
  */
 public class Solution {
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> list = new ArrayList<>();
+        List<String> res = new ArrayList<>();
         if (root == null)
-            return list;
-        helper(root, list, new StringBuilder());
-        return list;
+            return res;
+        helper(root, res, new ArrayList<String>());
+        return res;
     }
-    private void helper(TreeNode node, List<String> list, StringBuilder s){
-        if (node == null)
+    private void helper(TreeNode root, List<String> res, List<String> cur) {
+        cur.add(String.valueOf(root.val));
+        if (root.left == null && root.right == null) {
+            res.add(String.join("->", cur));
             return;
-        if (node.left == null && node.right == null){
-            s.append(node.val);
-            list.add(s.toString());
-        }else {
-            s.append(String.valueOf(node.val) + "->");
-            StringBuilder s1 = new StringBuilder(s.toString());
-            helper(node.left, list, s);
-            helper(node.right, list, s1);
         }
+        List<String> snapshot = new ArrayList<>(cur);
+        if (root.left != null)
+            helper(root.left, res, cur);
+        if (root.right != null)
+            helper(root.right, res, snapshot);
     }
 }

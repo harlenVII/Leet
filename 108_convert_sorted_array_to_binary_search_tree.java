@@ -11,15 +11,15 @@ public class Solution {
     public TreeNode sortedArrayToBST(int[] nums) {
         if (nums == null || nums.length == 0)
             return null;
-        int[] leftNums = new int[nums.length / 2];
-        int[] rightNums = new int[nums.length - nums.length / 2 - 1];
-        for (int i = 0; i < nums.length / 2; i++)
-            leftNums[i] = nums[i];
-        for (int i = 0; i < nums.length - nums.length / 2 - 1; i++)
-            rightNums[i] = nums[i + nums.length / 2 + 1];
-        TreeNode root = new TreeNode(nums[nums.length / 2]);
-        root.left = sortedArrayToBST(leftNums);
-        root.right = sortedArrayToBST(rightNums);
+        return BST(nums, 0, nums.length - 1);
+    }
+    private TreeNode BST(int[] nums, int i, int j) {
+        if (i > j)
+            return null;
+        int mid = i + (j - i) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = BST(nums, i, mid - 1);
+        root.right = BST(nums, mid + 1, j);
         return root;
     }
 }
