@@ -1,34 +1,34 @@
 public class Solution {
-    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0)
             return 0;
-        int len = 1;
-        Set<String> set = new HashSet<>();
+        Set<String> words = new HashSet<>(wordList);
+        Queue<String> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
-        set.add(beginWord);
-        while (!set.isEmpty()) {
-            len++;
-            Set<String> temp = new HashSet<>();
-            for (String word : set) {
-                char[] seq = word.toCharArray();
-                for (int i = 0; i < seq.length; i++) {
-                    for (char ch = 'a'; ch <= 'z'; ch++) {
-                        if (seq[i] == ch)
+        queue.offer(beginWord);
+        int res = 1;
+        while (!queue.isEmpty()) {
+            res++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                char[] chars = queue.poll().toCharArray();
+                for (int j = 0; j < chars.length; j++) {
+                    for (char k = 'a'; k <= 'z'; k++) {
+                        if (chars[j] == k)
                             continue;
-                        char old = seq[i];
-                        seq[i] = ch;
-                        String newWord = String.valueOf(seq);
-                        if (wordList.contains(newWord) && !visited.contains(newWord)) {
-                            if (newWord.equals(endWord))
-                                return len;
-                            temp.add(newWord);
-                            visited.add(newWord);
+                        char origin = chars[j];
+                        chars[j] = k;
+                        String newstr = String.valueOf(chars);
+                        if (words.contains(newstr) && !visited.contains(newstr)) {
+                            if (newstr.equals(endWord))
+                                return res;
+                            visited.add(newstr);
+                            queue.offer(newstr);
                         }
-                        seq[i] = old;
+                        chars[j] = origin;
                     }
                 }
             }
-            set = temp;
         }
         return 0;
     }

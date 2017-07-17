@@ -1,32 +1,32 @@
 public class Solution {
     public boolean exist(char[][] board, String word) {
-        if (board == null || board.length == 0 || word == null || word.length() == 0)
-            return false;
-        boolean[][] used = new boolean[board.length][board[0].length];
-        boolean result = false;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++)
-                result = result || helper(board, used, word, i, j);
-        }
-        return result;
-    }
-    private boolean helper(char[][] board, boolean[][] used, String word, int i, int j) {
-        if (used[i][j] == true || board[i][j] != word.charAt(0))
-            return false;
-        if (word.length() == 1 && board[i][j] == word.charAt(0))
+        if (board == null || board.length == 0 || word == null)
             return true;
-        used[i][j] = true;
-        boolean result = false;
-        String sub = word.substring(1);
-        if (i - 1 >= 0)
-            result = result || helper(board, used, sub, i - 1, j);
-        if (j - 1 >= 0)
-            result = result || helper(board, used, sub, i, j - 1);
-        if (i + 1 < board.length)
-            result = result || helper(board, used, sub, i + 1, j);
-        if (j + 1 < board[0].length)
-            result = result || helper(board, used, sub, i, j + 1);
-        used[i][j] = false;
-        return result;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (helper(board, new boolean[board.length][board[0].length], word, i, j))
+                    return true;
+            }
+        }
+        return false;
+    }
+    private boolean helper(char[][] board, boolean[][] visited, String word, int x, int y) {
+        if (word.isEmpty())
+            return true;
+        if (x < 0 || x == board.length || y < 0 || y == board[0].length)
+            return false;
+        if (word.charAt(0) != board[x][y] || visited[x][y])
+            return false;
+        visited[x][y] = true;
+        int[] dx = new int[]{1, -1, 0, 0};
+        int[] dy = new int[]{0, 0, 1, -1};
+        for (int i = 0; i < 4; i++) {
+            int newx = x + dx[i];
+            int newy = y + dy[i];
+            if (helper(board, visited, word.substring(1), newx, newy))
+                return true;
+        }
+        visited[x][y] = false;
+        return false;
     }
 }

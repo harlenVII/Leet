@@ -1,59 +1,57 @@
 public class Solution {
     class Node{
-        String value;
+        String val;
         Node parent;
-        Node(String v, Node p) {
-            value = v;
-            parent = p;
+        Node(String val, Node parent) {
+            this.val = val;
+            this.parent = parent;
         }
     }
-    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
-        // check input
-        Set<String> visited = new HashSet<>();
-        Set<Node> set = new HashSet<>();
-        set.add(new Node(beginWord, null));
-        boolean find = false;
-        Set<Node> result = new HashSet<>();
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         List<List<String>> res = new ArrayList<>();
-        while (!set.isEmpty()) {
-            Set<Node> tempSet = new HashSet<>();
-            // need to create a snapshot of visited, because there maybe are different ways to the same words in a same distance
-            Set<String> visitedSnapshot = new HashSet<>(visited);
-            for (Node node : set) {
-                String word = node.value;
-                char[] cs = word.toCharArray();
-                for (int i = 0; i < cs.length; i++) {
-                    char temp = cs[i];
-                    for (char j = 'a'; j <= 'z'; j++) {
-                        if (j == cs[i])
+        if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0)
+            return res;
+        Set<String> visited = new HashSet<>();
+        Set<String> words = new HashSet<>(wordList);
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(new Node(beginWord, null));
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            // need to create a snapshot for visited because there may be different ways to read same works in a same distance
+            Set<String> snapshot = new HashSet<>(visited);
+            for (int i = 0; i < size; i++) {
+                Node temp = queue.poll();
+                char[] chars = temp.val.toCharArray();
+                for (int j = 0; j < chars.length; j++) {
+                    for (char k = 'a'; k <= 'z'; k++) {
+                        if (chars[j] == k)
                             continue;
-                        cs[i] = j;
-                        String newWord = String.valueOf(cs);
-                        // add to result list
-                        if (newWord.equals(endWord)) {
-                            find = true;
-                            result.add(new Node(newWord, node));
+                        char origin = chars[j];
+                        chars[j] = k;
+                        String newstr = String.valueOf(chars);
+                        if (words.contains(newstr) && !snapshot.contains(newstr)) {
+                            visited.add(newstr);
+                            Node node = new Node(newstr, temp);
+                            queue.offer(node);
+                            if (newstr.equals(endWord)) {
+                                res.add(nodesToList(node));
+                            }
                         }
-                        if (wordList.contains(newWord) && !visitedSnapshot.contains(newWord)) {
-                            tempSet.add(new Node(newWord, node));
-                            visited.add(newWord);
-                        }
+                        chars[j] = origin;
                     }
-                    cs[i] = temp;
                 }
             }
-            // complete this round
-            if (find == true)
-                break;
-            set = tempSet;
+            if (res.size() > 0)
+                return res;
         }
-        for (Node n : result) {
-            LinkedList<String> cur = new LinkedList<>();
-            while (n != null) {
-                cur.addFirst(n.value);
-                n = n.parent;
-            }
-            res.add(cur);
+        return res;
+    }
+    private List<String> nodesToList(Node node) {
+        LinkedList<String> res = new LinkedList<>();
+        while (node != null) {
+            res.addFirst(node.val);
+            node = node.parent;
         }
         return res;
     }
