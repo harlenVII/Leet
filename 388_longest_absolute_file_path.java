@@ -2,15 +2,21 @@ public class Solution {
     public int lengthLongestPath(String input) {
         if (input == null || input.length() == 0)
             return 0;
-        int max = 0;
-        int[] list = new int[input.lastIndexOf("\n") + 3];
-        for (String s : input.split("\n")) {
-            int level = s.lastIndexOf("\t") + 1;
-            list[level + 1] = list[level] + s.length() - level + 1;
-            if (s.contains(".")) {
-                max = Math.max(max, list[level + 1] - 1);
+        int res = 0;
+        String[] strs = input.split("\n");
+        List<Integer> list = new ArrayList<>();
+        for (String str : strs) {
+            int level = str.lastIndexOf("\t") + 1;
+            int newVal = (level == 0 ? 0 : list.get(level - 1) + 1) + str.length() - level;
+            if (list.size() > level) {
+                list.set(level, newVal);
+            } else {
+                list.add(newVal);
+            }
+            if (str.contains(".")) {
+                res = Math.max(res, newVal);
             }
         }
-        return max;
+        return res;
     }
 }

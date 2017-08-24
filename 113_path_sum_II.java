@@ -8,22 +8,23 @@
  * }
  */
 public class Solution {
-    List<List<Integer>> list= new ArrayList<>();
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        helper(root, sum, 0, new ArrayList<Integer>());
-        return list;
-    }
-    private void helper(TreeNode root, int sum, int cur, List<Integer> curList){
+        List<List<Integer>> res = new ArrayList<>();
         if (root == null)
+            return res;
+        helper(root, res, new ArrayList<>(), sum);
+        return res;
+    }
+    private void helper(TreeNode node, List<List<Integer>> res, List<Integer> cur, int left) {
+        if (node == null)
             return;
-        curList.add(root.val);
-        if (root.left == null && root.right == null) // leaf
-            if (sum == cur + root.val){
-                list.add(curList);
-                return;
-            }
-        List<Integer> newList = new ArrayList<>(curList);
-        helper(root.right, sum, cur + root.val, curList);
-        helper(root.left, sum, cur + root.val, newList);
+        cur.add(node.val);
+        if (node.left == null && node.right == null) {
+            if (left == node.val)
+                res.add(new ArrayList<>(cur));
+        }
+        helper(node.left, res, cur, left - node.val);
+        helper(node.right, res, cur, left - node.val);
+        cur.remove(cur.size() - 1);
     }
 }
