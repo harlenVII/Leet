@@ -1,20 +1,17 @@
-public class Solution {
+class Solution {
     public int hIndex(int[] citations) {
-        if (citations == null || citations.length == 0)
+        if (citations.length == 0)
             return 0;
-        int len = citations.length;
-        int res[] = new int[len + 1];
-        for (int i :  citations) {
-            if (i >= len)
-                res[len]++;
+        int[] buckets = new int[citations.length + 1];
+        for (int num : citations)
+            if (num >= citations.length)
+                buckets[citations.length]++;
             else
-                res[i]++;
-        }
-        
-        int total = 0;
-        for (int i = len; i >= 0; i--) {
-            total += res[i];
-            if (total >= i)
+                buckets[num]++;
+        int count = 0;
+        for (int i = citations.length; i>= 0; i--) {
+            count += buckets[i];
+            if (count >= i)
                 return i;
         }
         return 0;
